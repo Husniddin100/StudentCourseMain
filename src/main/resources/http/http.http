@@ -102,7 +102,7 @@ GET localhost:8081/student_mark/mark/1/2024-01-15T18:48:07.76655
 
 
 ### page
-GET localhost:8081/student/pagination?page=&size=
+GET localhost:8081/student/pagination?page=1&size=10
 
 ### between mark
 GET localhost:8081/student_mark/betweenMark/1/2024-01-15T12:21:44.643618/2024-01-15T14:35:27.195116
