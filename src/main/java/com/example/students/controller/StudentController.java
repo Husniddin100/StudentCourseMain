@@ -63,4 +63,23 @@ public class StudentController {
                                                @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return ResponseEntity.ok(studentService.pagination(page, size));
     }
+
+    @GetMapping("/level/{level}")
+    public ResponseEntity<PageImpl> getStudentsByLevelWithPagination(
+            @PathVariable String level,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+
+        PageImpl students = studentService.paginationsBylevel(level, page, size);
+        return ResponseEntity.ok(students);
+    }
+    @GetMapping("/gender/{gender}")
+    public ResponseEntity<PageImpl> getStudentsByGenderWithPagination(
+            @PathVariable String gender,
+            @RequestParam(defaultValue = "1") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        PageImpl students = studentService.paginationsByGender(gender, page, size);
+        return ResponseEntity.ok(students);
+    }
+
 }

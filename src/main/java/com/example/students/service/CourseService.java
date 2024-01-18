@@ -7,6 +7,7 @@ import com.example.students.entity.StudentEntity;
 import com.example.students.exp.AppBadException;
 import com.example.students.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -82,5 +83,20 @@ public class CourseService {
 
     public List<CourseEntity> betweenDates(LocalDateTime started, LocalDateTime ended) {
         return courseRepository.findByCreatedDateBetween(started, ended);
+    }
+    public PageImpl paginations(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.ASC, "id");
+
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+        Page<CourseEntity> coursePage = courseRepository.findAll(paging);
+
+        List<CourseEntity> entityList = coursePage.getContent();
+        Long totalElements = coursePage.getTotalElements();
+
+        List<CourseDTO> dtoList = new LinkedList<>();
+        for (CourseEntity course : entityList) {
+            dtoList.add(toDTO(course));
+        }
+        return new PageImpl<>(dtoList, paging, totalElements);
     }
 }

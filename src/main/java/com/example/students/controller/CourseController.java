@@ -6,11 +6,13 @@ import com.example.students.entity.CourseEntity;
 import com.example.students.entity.StudentEntity;
 import com.example.students.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -60,4 +62,10 @@ public class CourseController {
         List<CourseEntity> courseEntities = courseService.betweenDates(started, ended);
         return ResponseEntity.ok(courseEntities);
     }
+    @GetMapping("/pagination")
+    public ResponseEntity<PageImpl> pagination(@RequestParam(value = "page", defaultValue = "1") Integer page,
+                                               @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        return ResponseEntity.ok(courseService.paginations(page, size));
+    }
+
 }

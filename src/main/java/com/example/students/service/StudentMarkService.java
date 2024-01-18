@@ -10,7 +10,9 @@ import com.example.students.repository.StudentCourseMarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ public class StudentMarkService {
         entity.setStudent(student);
         entity.setCourse(course);
         entity.setMark(dto.getMark());
-        entity.setCreatedDate(LocalDateTime.now());
+        entity.setCreatedDate(LocalDate.now());
 
         studentCourseMarkRepository.save(entity);
         dto.setId(entity.getId());
@@ -66,9 +68,13 @@ public class StudentMarkService {
         studentCourseMarkRepository.findByStudentAndCourseOrderByCreatedDateDesc(StudentEntity.id(studentId), courseEntity);
         return null;
     }
-    public Iterable<StudentCourseMarkEntity> getAll() {
+    public List<StudentCourseMarkDTO> getAll() {
         Iterable<StudentCourseMarkEntity> entityList = studentCourseMarkRepository.findAll();
-        return entityList;
+        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
+        for (StudentCourseMarkEntity entity : entityList) {
+            dtoList.add(toDTO(entity));
+        }
+        return dtoList;
     }
 
 
@@ -80,11 +86,24 @@ public class StudentMarkService {
         return optional.get();
     }
 
-    public List<StudentCourseMarkEntity> getStudentGivenDate(Integer id, LocalDateTime date) {
-        return studentCourseMarkRepository.findAllByIdAndCreatedDate(id,date);
+    public List<StudentCourseMarkEntity> getStudentGivenDate(Integer id, LocalDate date) {
+        return studentCourseMarkRepository.findAllByStudent_IdAndCreatedDate(id,date);
     }
 
-    public List<StudentCourseMarkEntity> getStudentsBetweenCreatedDatesMark(Integer id, LocalDateTime startDate, LocalDateTime endDate) {
-        return studentCourseMarkRepository.findByIdAndCreatedDateBetween(id,startDate,endDate);
+    public List<StudentCourseMarkEntity> getStudentsBetweenCreatedDatesMark(Integer id, LocalDate startDate, LocalDate endDate) {
+        return studentCourseMarkRepository.findAllByStudent_IdAndCreatedDateBetween(id,startDate,endDate);
+    }
+    public StudentCourseMarkDTO toDTO(StudentCourseMarkEntity entity) {
+        StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
+        dto.setId(entity.getId());
+        dto.setStudentId(entity.getStudent().getId());
+        dto.setCourseId(entity.getCourse().getId());
+        dto.setMark(entity.getMark());
+        dto.setCreatedDate(entity.getCreatedDate());
+        return dto;
+    }
+
+    public Optional<StudentCourseMarkEntity> firstMark(Integer id) {
+        return studentCourseMarkRepository.firstMark(id);
     }
 }

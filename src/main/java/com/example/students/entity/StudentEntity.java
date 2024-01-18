@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@NoArgsConstructor
 @Entity
 @Table(name = "Student")
 public class StudentEntity {
@@ -29,9 +28,22 @@ public class StudentEntity {
     private String gender;
     @Column(name = "created_date")
     private LocalDateTime createdDate;
+
+    @OneToMany(mappedBy = "student")
+    List<StudentCourseMarkEntity> scmList;
     public StudentEntity(Integer id) {
         this.id = id;
     }
+
+    public StudentEntity() {
+    }
+
+    public StudentEntity(Integer id, String name, String surname) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+    }
+
 
     public static StudentEntity id(Integer id) {
         return new StudentEntity(id);

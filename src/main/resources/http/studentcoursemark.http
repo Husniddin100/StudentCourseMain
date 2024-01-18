@@ -1,0 +1,24 @@
+
+### create student course mark
+POST localhost:8081/studentMark/create
+Content-Type: application/json
+
+{
+"studentId": 1,
+  "courseId": 2,
+  "mark": 4
+}
+
+### get all
+GET localhost:8081/studentMark/all
+
+### ????
+GET localhost:8081/studentMark/mark/2/2024-01-18
+
+
+### between mark
+GET localhost:8081/studentMark/betweenMark/2/2024-01-18/2024-01-19
+
+###
+GET localhost:8081/studentMark/firsMark/1
+

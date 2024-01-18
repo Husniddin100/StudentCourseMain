@@ -1,0 +1,37 @@
+### create course
+POST localhost:8081/course
+Content-Type: application/json
+
+{
+  "name": "English",
+  "price": 50,
+  "duration": "6-oy"
+}
+
+### course list
+GET localhost:8081/course/all
+
+### Get byId
+GET localhost:8081/course/1
+
+### update
+PUT localhost:8081/course/update/1
+Content-Type: application/json
+
+{
+  "name": "test",
+  "price": 110
+}
+
+
+### delete
+DELETE localhost:8081/course/delete/1
+
+### between price
+GET localhost:8081/course/between/100/200
+
+### between date
+GET localhost:8081/course/betweenDates/2024-01-15T14:35:27.195116/2024-01-15T14:36:16.387636
+
+### page
+GET localhost:8081/course/pagination?page=1&size=10

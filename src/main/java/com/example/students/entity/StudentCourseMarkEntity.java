@@ -6,9 +6,12 @@ import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@Getter
+@Setter
 @Entity
 @Table(name = "student_course_mark")
 public class StudentCourseMarkEntity {
@@ -22,8 +25,7 @@ public class StudentCourseMarkEntity {
     @JoinColumn(name = "course_id")
     private CourseEntity course;
     @Column
-    private int mark;
-    @Temporal(TemporalType.TIMESTAMP)
+    private Integer mark;
     @Column
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 }
