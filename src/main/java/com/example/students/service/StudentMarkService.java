@@ -1,17 +1,17 @@
 package com.example.students.service;
 
-import com.example.students.Dto.StudentCourseMarkDTO;
-import com.example.students.Dto.StudentDTO;
+import com.example.students.Dto.*;
 import com.example.students.entity.CourseEntity;
 import com.example.students.entity.StudentCourseMarkEntity;
 import com.example.students.entity.StudentEntity;
 import com.example.students.exp.AppBadException;
+import com.example.students.repository.StudentCourseMarkCustomRepository;
 import com.example.students.repository.StudentCourseMarkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +24,8 @@ public class StudentMarkService {
     private CourseService courseService;
     @Autowired
     private StudentCourseMarkRepository studentCourseMarkRepository;
+    @Autowired
+    private StudentCourseMarkCustomRepository studentCourseMarkCustomRepository;
 
     public StudentCourseMarkDTO create(StudentCourseMarkDTO dto) {
        StudentEntity student = studentService.get(dto.getStudentId());
@@ -106,4 +108,60 @@ public class StudentMarkService {
     public Optional<StudentCourseMarkEntity> firstMark(Integer id) {
         return studentCourseMarkRepository.firstMark(id);
     }
-}
+/*    public void joinExample(Integer id){
+        List<StudentMapper> mapperList = studentCourseMarkRepository.studentCourse(id);
+        List<StudentDTO> dtoList = new LinkedList<>();
+        for (StudentMapper mapper : mapperList) {
+            StudentDTO dto = new StudentDTO();
+            dto.setId(mapper.getId());
+            dto.setName(mapper.getName());
+            dto.setSurname(mapper.getSurname());
+            dtoList.add(dto);
+        }
+        System.out.println();
+    }*/
+    public List<StudentCourseMarkDTO> test(Integer id) {
+        List<Object[]> objectList = studentCourseMarkRepository.studentCourse(id);
+        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
+        for (Object[] obj : objectList) {
+            StudentCourseMarkDTO dto = new StudentCourseMarkDTO();
+            CourseDTO dto1= new CourseDTO();
+            dto.setId((Integer) obj[0]);
+            dto.setMark((Integer) obj[1]);
+            dto.setCreatedDate((LocalDate) obj[2]);
+            dto1.setId((Integer) obj[3]);
+            dto1.setName((String) obj[4]);
+            dto1.setDuration((String) obj[5]);
+            dtoList.add(dto);
+            dtoList.add(dto1);
+        }
+        return dtoList;
+    }
+
+    public PageImpl paginations(Integer page, Integer size) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "id");
+
+        Pageable paging = PageRequest.of(page - 1, size, sort);
+        Page<StudentCourseMarkEntity> studentPage = studentCourseMarkRepository.findAll(paging);
+
+        List<StudentCourseMarkEntity> entityList = studentPage.getContent();
+        Long totalElements = studentPage.getTotalElements();
+
+        List<StudentCourseMarkDTO> dtoList = new LinkedList<>();
+        for (StudentCourseMarkEntity student : entityList) {
+            dtoList.add(toDTO(student));
+        }
+        return new PageImpl<>(dtoList, paging, totalElements);
+    }
+
+    public PageImpl<StudentCourseMarkDTO> filter(StudentCourseMarkFilterDTO filter, int page, int size) {
+        PaginationResultDTO<StudentCourseMarkEntity> paginationResult=studentCourseMarkCustomRepository.filter(filter,page,size);
+
+        List<StudentCourseMarkDTO>dtoList=new LinkedList<>();
+        for (StudentCourseMarkEntity entity:paginationResult.getList()) {
+            dtoList.add(toDTO(entity));
+        }
+        Pageable paging=PageRequest.of(page-1,size);
+        return new PageImpl<>(dtoList,paging,paginationResult.getTotalSize());
+    }
+    }

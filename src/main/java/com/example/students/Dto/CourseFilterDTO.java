@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class CourseDTO extends StudentCourseMarkDTO {
+public class CourseFilterDTO {
     private Integer id;
     private String name;
     private Double price;

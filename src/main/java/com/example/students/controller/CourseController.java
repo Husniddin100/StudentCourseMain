@@ -1,7 +1,9 @@
 package com.example.students.controller;
 
 import com.example.students.Dto.CourseDTO;
+import com.example.students.Dto.CourseFilterDTO;
 import com.example.students.Dto.StudentDTO;
+import com.example.students.Dto.StudentFilterDTO;
 import com.example.students.entity.CourseEntity;
 import com.example.students.entity.StudentEntity;
 import com.example.students.service.CourseService;
@@ -67,5 +69,11 @@ public class CourseController {
                                                @RequestParam(value = "size", defaultValue = "10") Integer size) {
         return ResponseEntity.ok(courseService.paginations(page, size));
     }
-
+    @PostMapping("/filter")
+    public ResponseEntity<PageImpl<CourseDTO>> create(@RequestBody CourseFilterDTO dto,
+                                                       @RequestParam(value = "page", defaultValue = "1") int page,
+                                                       @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageImpl<CourseDTO> result = courseService.filter(dto, page, size);
+        return ResponseEntity.ok(result);
+    }
 }

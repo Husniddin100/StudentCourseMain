@@ -22,3 +22,16 @@ GET localhost:8081/studentMark/betweenMark/2/2024-01-18/2024-01-19
 ###
 GET localhost:8081/studentMark/firsMark/1
 
+###
+GET localhost:8081/studentMark/getCourseInfo/3`
+
+###
+GET localhost:8081/studentMark/pagination?page=&size=
+
+### filter
+POST localhost:8081/studentMark/filter?page=1&size=10
+Content-Type: application/json
+
+{
+
+}

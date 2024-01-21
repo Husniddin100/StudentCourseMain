@@ -3,10 +3,13 @@ package com.example.students.repository;
 import com.example.students.entity.CourseEntity;
 import com.example.students.entity.StudentCourseMarkEntity;
 import com.example.students.entity.StudentEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -43,4 +46,16 @@ public interface StudentCourseMarkRepository extends CrudRepository<StudentCours
     List<StudentCourseMarkEntity> findAllByStudent_IdAndCreatedDateBetween(Integer id, LocalDate started, LocalDate ended);
     @Query("from StudentCourseMarkEntity where student.id=?1 order by mark desc limit 1")
     Optional<StudentCourseMarkEntity> firstMark(Integer id);
+
+    @Query("select scm.id,scm.mark,scm.createdDate,c.id," +
+            "c.name,c.duration from StudentCourseMarkEntity scm inner join scm.course c " +
+            "inner join scm.student as s where s.id=?1 ")
+    List<Object[]>studentCourse(Integer id);
+
+    @Query("select scm.id,scm.mark,scm.createdDate,c.id," +
+            "c.name,c.duration from StudentCourseMarkEntity scm inner join scm.course c " +
+            "inner join scm.student as s where c.id=?1 ")
+    List<Object[]>test(Integer id);
+
+    Page<StudentCourseMarkEntity> findAllBy( Pageable paging);
 }

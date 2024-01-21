@@ -1,6 +1,7 @@
 package com.example.students.controller;
 
 import com.example.students.Dto.StudentDTO;
+import com.example.students.Dto.StudentFilterDTO;
 import com.example.students.entity.StudentEntity;
 import com.example.students.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,5 +82,13 @@ public class StudentController {
         PageImpl students = studentService.paginationsByGender(gender, page, size);
         return ResponseEntity.ok(students);
     }
+    @PostMapping("/filter")
+    public ResponseEntity<PageImpl<StudentDTO>> create(@RequestBody StudentFilterDTO dto,
+                                                       @RequestParam(value = "page", defaultValue = "1") int page,
+                                                       @RequestParam(value = "size", defaultValue = "10") int size) {
+        PageImpl<StudentDTO> result = studentService.filter(dto, page, size);
+        return ResponseEntity.ok(result);
+    }
+
 
 }

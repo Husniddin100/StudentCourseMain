@@ -1,13 +1,15 @@
 package com.example.students.mapped;
 
+import java.time.LocalDate;
+
 public class StudentInfoMapper {
     private Integer id ;
     private String name;
-    private String level;
+    private LocalDate createdDate;
 
-    public StudentInfoMapper(Integer id, String name, String level) {
+    public StudentInfoMapper(Integer id, String name, LocalDate createdDate) {
         this.id = id;
         this.name = name;
-        this.level = level;
+        this.createdDate = createdDate;
     }
 }

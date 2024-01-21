@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "name": "English",
   "price": 50,
-  "duration": "6-oy"
+  "duration": "12"
 }
 
 ### course list
@@ -35,3 +35,14 @@ GET localhost:8081/course/betweenDates/2024-01-15T14:35:27.195116/2024-01-15T14:
 
 ### page
 GET localhost:8081/course/pagination?page=1&size=10
+
+### filter
+POST localhost:8081/course/filter?page=1&size=10
+Content-Type: application/json
+
+{
+  "name": "English",
+  "duration": "12",
+  "price": 100,
+  "id": 1
+}

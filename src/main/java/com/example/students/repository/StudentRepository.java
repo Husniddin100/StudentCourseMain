@@ -4,9 +4,11 @@ import com.example.students.Dto.StudentDTO;
 import com.example.students.entity.StudentEntity;
 import com.example.students.mapped.StudentInfoMapper;
 import com.example.students.mapped.StudentMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -57,25 +59,31 @@ public interface StudentRepository extends CrudRepository<StudentEntity, Integer
     @Query("select new com.example.students.mapped.StudentInfoMapper (s.id, s.name,s.surname) from StudentEntity  s")
     List<StudentInfoMapper[]> getshortInfo3();
 
-   @Query("from StudentEntity s,BookEntity b")
-    List<Objects[]>joinExample();
+    @Query("from StudentEntity s,BookEntity b")
+    List<Objects[]> joinExample();
 
     @Query("from StudentEntity s,BookEntity b where s.id=b.id")
-    List<Objects[]>joinExample2();
+    List<Objects[]> joinExample2();
 
     @Query("from StudentEntity s inner join BookEntity b on s.id=b.id")
-    List<Objects[]>joinExample3();
+    List<Objects[]> joinExample3();
 
     @Query("select s from StudentEntity s inner join s.scmList scm where scm.id=:scmId")
-    List<StudentEntity>joinExample(@Param("scmId") Integer scmId);
+    List<StudentEntity> joinExample(@Param("scmId") Integer scmId);
 
-    @Query(value = "select * from student",nativeQuery = true)
-    List<StudentEntity>nativeQuery();
+    @Query(value = "select * from student", nativeQuery = true)
+    List<StudentEntity> nativeQuery();
 
     @Query(value = "select s.id,s.name, s.surname, " +
             " (select count(*) from student_course_mark where student_id = s.id) as markCount " +
             "from student s", nativeQuery = true)
     List<StudentMapper> joinExample12();
 
-
+    @Transactional
+    @Modifying
+    @Query("update StudentEntity set name=:name,surname=:surname where id=:id")
+    int updateStudent(@Param("name") String name,
+                      @Param("surname") String surname,
+                      @Param("id") Integer id);
 }
+

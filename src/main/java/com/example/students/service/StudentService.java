@@ -1,9 +1,12 @@
 package com.example.students.service;
 
+import com.example.students.Dto.PaginationResultDTO;
+import com.example.students.Dto.StudentFilterDTO;
 import com.example.students.exp.AppBadException;
 import com.example.students.Dto.StudentDTO;
 import com.example.students.entity.StudentEntity;
 import com.example.students.mapped.StudentMapper;
+import com.example.students.repository.StudentCustomRepository;
 import com.example.students.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -19,7 +22,8 @@ import java.util.Optional;
 public class StudentService {
     @Autowired
     private StudentRepository studentRepository;
-
+   @Autowired
+   private StudentCustomRepository studentCustomRepository;
     public StudentDTO create(StudentDTO dto) {
         StudentEntity entity = new StudentEntity();
         entity.setName(dto.getName());
@@ -185,4 +189,20 @@ public class StudentService {
        }
        System.out.println();
    }
+
+   public boolean updates(Integer id ,StudentDTO dto){
+        int effectiveRows=studentRepository.updateStudent(dto.getName(),dto.getSurname(),id);
+        return true;
+   }
+    public PageImpl<StudentDTO> filter(StudentFilterDTO filter, int page, int size) {
+        PaginationResultDTO<StudentEntity> paginationResult = studentCustomRepository.filter(filter, page, size);
+
+        List<StudentDTO> dtoList = new LinkedList<>();
+        for (StudentEntity entity : paginationResult.getList()) {
+            dtoList.add(toDTO(entity));
+        }
+
+        Pageable paging = PageRequest.of(page - 1, size);
+        return new PageImpl<>(dtoList, paging, paginationResult.getTotalSize());
+    }
 }

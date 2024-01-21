@@ -5,13 +5,16 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 @Getter
 @Setter
-public class CourseDTO extends StudentCourseMarkDTO {
+public class StudentFilterDTO {
     private Integer id;
     private String name;
-    private Double price;
-    private String duration;
-    private LocalDate createdDate;
+    private String surname;
+    private String level;
+    private Integer age;
+    private String gender;
+    private LocalDate fromDate;
+    private LocalDate toDate;
+
 }

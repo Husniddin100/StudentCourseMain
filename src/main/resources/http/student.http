@@ -4,8 +4,8 @@ Content-Type: application/json
 
 {
   "name": "Ali",
-  "surname": "Aliyev",
-  "level": "5",
+  "surname": "VAliyev",
+  "level": "1",
   "age": 14,
   "gender": "male"
 }
@@ -58,5 +58,14 @@ GET localhost:8081/student/level/2
 ### paginationsByLevel sorted by id
 GET localhost:8081/student/gender/male
 
+### filter
+POST localhost:8081/student/filter?page=1&size=10
+Content-Type: application/json
+
+{
+  "name": "Ali",
+  "surname": "Aliyev",
+  "id": 1
+}
 
 
