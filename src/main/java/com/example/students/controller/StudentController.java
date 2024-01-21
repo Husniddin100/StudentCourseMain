@@ -73,6 +73,7 @@ public class StudentController {
 
         PageImpl students = studentService.paginationsBylevel(level, page, size);
         return ResponseEntity.ok(students);
+
     }
     @GetMapping("/gender/{gender}")
     public ResponseEntity<PageImpl> getStudentsByGenderWithPagination(
